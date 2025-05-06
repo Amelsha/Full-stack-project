@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--=============== FAVICON ===============-->
+        <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+
+        <!--=============== REMIX ICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assets/css/styles.css">
+
+        <title>Responsive plants website</title>
+    </head>
+    <body>
+        <!--==================== HEADER ====================-->
+        <header class="header" id="header">
+            <nav class="nav container">
+                <a href="index.html" class="nav__logo">
+                    <i class="ri-leaf-line nav__logo-icon"></i> GreenHues
+                </a>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="index.html" class="nav__link">Home</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="shop.html" class="nav__link active-link">Shop</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="doctor.html" class="nav__link">Plant Doctor</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="blog.html" class="nav__link">Blog</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="contact.html" class="nav__link">Contact Us</a>
+                        </li>
+                    </ul>
+
+                    <div class="nav__close" id="nav-close">
+                        <i class="ri-close-line"></i>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <!-- <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search products...">
+                    <button class="search-button">
+                        <i class="ri-search-line"></i>
+                    </button>
+                </div> -->
+
+                <div class="nav__btns">
+                    <!-- Theme change button -->
+                    <i class="ri-moon-line change-theme" id="theme-button"></i>
+
+                    <div class="nav__toggle" id="nav-toggle">
+                        <i class="ri-menu-line"></i>
+                    </div>
+                </div>
+
+                <!-- extra added for the shop page -->
+                <!-- <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="cart.html" class="nav__link">
+                                <i class="ri-shopping-cart-line"></i>Cart</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="checkout.html" class="nav__link">
+                            <i class="ri-shopping-bag-line"></i>Checkout</a>
+                        </li>
+                    </ul>
+                </div>         -->
+            </nav>
+        </header>
+        
+<!--==================== PRODUCTS ====================-->
+<section class="product section container" id="products">
+    <h2 class="section__title-center">
+        Check out our products
+    </h2>
+
+    <p class="product__description">
+        Here are some selected plants from our showroom, all are in excellent 
+        shape and have a long life span. Buy and enjoy best quality.
+    </p>
+
+    <div class="product__container grid">
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product1.png" alt="" class="product__img">
+
+            <h3 class="product__title">Cacti Plant</h3>
+            <span class="product__price">₹1999</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product2.png" alt="" class="product__img">
+
+            <h3 class="product__title">Cactus Plant</h3>
+            <span class="product__price">₹1199</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product3.png" alt="" class="product__img">
+
+            <h3 class="product__title">Aloe Vera Plant</h3>
+            <span class="product__price">₹7999</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product4.png" alt="" class="product__img">
+
+            <h3 class="product__title">Succulent Plant</h3>
+            <span class="product__price">₹5999</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product5.png" alt="" class="product__img">
+
+            <h3 class="product__title">Succulent Plant</h3>
+            <span class="product__price">₹1099</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+
+        <article class="product__card">
+            <div class="product__circle"></div>
+
+            <img src="assets/img/product6.png" alt="" class="product__img">
+
+            <h3 class="product__title">Green Plant</h3>
+            <span class="product__price">₹8999</span>
+
+            <a href="cart.html" class="button--flex product__button">
+                <i class="ri-shopping-bag-line"></i>
+            </a>
+        </article>
+    </div>
+</section>
+
+ 
+<!--=============== SCROLL UP ===============-->
+<a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-fill scrollup__icon"></i>
+</a>
+<!--=============== MAIN JS ===============-->
+<script src="assets/js/main.js"></script>
+</body>
+    </html>
