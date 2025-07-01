@@ -652,4 +652,32 @@ if (window.location.pathname.endsWith('contact.html')) {
   });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.location.pathname.endsWith('blog.html')) {
+    const blogContainer = document.querySelector('.blog__container');
+    if (blogContainer) {
+      fetch('http://localhost:5000/api/blogs')
+        .then(res => res.json())
+        .then(blogs => {
+          blogContainer.innerHTML = '';
+          blogs.forEach(blog => {
+            blogContainer.innerHTML += `
+              <article class="blog__card">
+                <div class="blog__image">
+                  <img src="${blog.image}" alt="${blog.title}">
+                </div>
+                <div class="blog__content">
+                  <h3 class="blog__title">${blog.title}</h3>
+                  <span class="blog__author">By ${blog.author}</span>
+                  <span class="blog__date">${new Date(blog.date).toLocaleDateString()}</span>
+                  <p class="blog__text">${blog.content.substring(0, 120)}...</p>
+                </div>
+              </article>
+            `;
+          });
+        });
+    }
+  }
+});
+
 
