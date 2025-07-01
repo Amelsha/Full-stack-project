@@ -72,47 +72,15 @@
                 <a href="shop.html" class="button">Continue Shopping</a>
             </div>
 
-            <!-- Cart items -->
-            <div class="cart__items">
-                <div class="cart__item">
-                    <img src="assets/img/product1.png" alt="Cacti Plant" class="cart__item-img">
-                    <div class="cart__item-content">
-                        <h3 class="cart__item-title">Cacti Plant</h3>
-                        <span class="cart__item-price">₹1999</span>
-                        <div class="cart__item-quantity">
-                            <button class="cart__quantity-btn" onclick="decreaseQuantity(this)">-</button>
-                            <input type="number" value="1" min="1" class="cart__quantity-input">
-                            <button class="cart__quantity-btn" onclick="increaseQuantity(this)">+</button>
-                        </div>
-                    </div>
-                    <button class="cart__item-remove">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
+            <!-- Cart items (dynamic) -->
+            <div class="cart__items"></div>
 
-                <div class="cart__item">
-                    <img src="assets/img/product2.png" alt="Cactus Plant" class="cart__item-img">
-                    <div class="cart__item-content">
-                        <h3 class="cart__item-title">Cactus Plant</h3>
-                        <span class="cart__item-price">₹1199</span>
-                        <div class="cart__item-quantity">
-                            <button class="cart__quantity-btn" onclick="decreaseQuantity(this)">-</button>
-                            <input type="number" value="1" min="1" class="cart__quantity-input">
-                            <button class="cart__quantity-btn" onclick="increaseQuantity(this)">+</button>
-                        </div>
-                    </div>
-                    <button class="cart__item-remove">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Cart summary -->
+            <!-- Cart summary (dynamic) -->
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Order Summary</h3>
                 <div class="cart__summary-item">
                     <span>Subtotal</span>
-                    <span>₹3198</span>
+                    <span>₹0</span>
                 </div>
                 <div class="cart__summary-item">
                     <span>Shipping</span>
@@ -120,7 +88,7 @@
                 </div>
                 <div class="cart__summary-item cart__summary-total">
                     <span>Total</span>
-                    <span>₹3297</span>
+                    <span>₹99</span>
                 </div>
                 <a href="checkout.html">
                     <button class="button cart__checkout-btn">

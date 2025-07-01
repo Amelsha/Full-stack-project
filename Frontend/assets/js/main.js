@@ -323,34 +323,45 @@ document.head.appendChild(style);
 
 /*=============== CART FUNCTIONALITY ===============*/
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on the cart page
-    const cartItems = document.querySelector('.cart__items');
-    if (!cartItems) return;
+    if (window.location.pathname.endsWith('cart.html')) {
+        const cartItemsContainer = document.querySelector('.cart__items');
+        const cartEmpty = document.querySelector('.cart__empty');
+        const cartSummary = document.querySelector('.cart__summary');
+        const subtotalElement = cartSummary.querySelector('.cart__summary-item:nth-child(1) span:last-child');
+        const totalElement = cartSummary.querySelector('.cart__summary-total span:last-child');
+        const shippingCost = 99;
 
-    const cartEmpty = document.querySelector('.cart__empty');
-    const cartSummary = document.querySelector('.cart__summary');
-    const subtotalElement = cartSummary.querySelector('.cart__summary-item:nth-child(1) span:last-child');
-    const totalElement = cartSummary.querySelector('.cart__summary-total span:last-child');
-    const shippingCost = 99;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cartItemsContainer.innerHTML = '';
 
-    // Function to update cart totals
-    function updateCartTotals() {
         let subtotal = 0;
-        const items = document.querySelectorAll('.cart__item');
-        
-        items.forEach(item => {
-            const price = parseInt(item.querySelector('.cart__item-price').textContent.replace('₹', ''));
-            const quantity = parseInt(item.querySelector('.cart__quantity-input').value);
-            subtotal += price * quantity;
+        cart.forEach(item => {
+            cartItemsContainer.innerHTML += `
+                <div class="cart__item">
+                    <img src="${item.image}" alt="${item.name}" class="cart__item-img">
+                    <div class="cart__item-content">
+                        <h3 class="cart__item-title">${item.name}</h3>
+                        <span class="cart__item-price">₹${item.price}</span>
+                        <div class="cart__item-quantity">
+                            <button class="cart__quantity-btn" onclick="decreaseQuantityCart('${item._id}')">-</button>
+                            <input type="number" value="${item.quantity}" min="1" class="cart__quantity-input" readonly>
+                            <button class="cart__quantity-btn" onclick="increaseQuantityCart('${item._id}')">+</button>
+                        </div>
+                    </div>
+                    <button class="cart__item-remove" onclick="removeFromCart('${item._id}')">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </div>
+            `;
+            subtotal += item.price * item.quantity;
         });
 
-        const total = subtotal + shippingCost;
-        
-        subtotalElement.textContent = `₹${subtotal}`;
-        totalElement.textContent = `₹${total}`;
+        // Update summary
+        if (subtotalElement) subtotalElement.textContent = `₹${subtotal}`;
+        if (totalElement) totalElement.textContent = `₹${subtotal + shippingCost}`;
 
-        // Show/hide empty cart message
-        if (items.length === 0) {
+        // Show/hide empty cart message and summary
+        if (cart.length === 0) {
             cartEmpty.style.display = 'flex';
             cartSummary.style.display = 'none';
         } else {
@@ -358,59 +369,38 @@ document.addEventListener('DOMContentLoaded', function() {
             cartSummary.style.display = 'block';
         }
     }
-
-    // Quantity increment function
-    window.increaseQuantity = function(button) {
-        const input = button.parentElement.querySelector('.cart__quantity-input');
-        input.value = parseInt(input.value) + 1;
-        updateCartTotals();
-    }
-
-    // Quantity decrement function
-    window.decreaseQuantity = function(button) {
-        const input = button.parentElement.querySelector('.cart__quantity-input');
-        const currentValue = parseInt(input.value);
-        if (currentValue > 1) {
-            input.value = currentValue - 1;
-            updateCartTotals();
-        }
-    }
-
-    // Remove item function
-    const removeButtons = document.querySelectorAll('.cart__item-remove');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const item = this.closest('.cart__item');
-            item.remove();
-            updateCartTotals();
-        });
-    });
-
-    // Initialize cart totals
-    updateCartTotals();
 });
 
 //subscibe button functionality
 const subscribeBtn = document.getElementById("subscribeBtn");
 if (subscribeBtn) {
-  subscribeBtn.addEventListener("click", function () {
+  subscribeBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     const emailInput = document.getElementById("emailInput");
     const message = document.getElementById("subscribeMessage");
     const email = emailInput.value.trim();
-    // Basic email validation regex
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^-\s@]+\.[^\s@]+$/;
     if (email === "" || !emailPattern.test(email)) {
       message.textContent = "Please enter a valid email address.";
       message.style.color = "red";
       return;
     }
-    // Simulate storing
-    localStorage.setItem("subscribedEmail", email);
-    // Show success message
-    message.textContent = "Thank you for subscribing!";
-    message.style.color = "green";
-    // Clear input
-    emailInput.value = "";
+    fetch('http://localhost:5000/api/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        message.textContent = data.error;
+        message.style.color = "red";
+      } else {
+        message.textContent = "Thank you for subscribing!";
+        message.style.color = "green";
+        emailInput.value = "";
+      }
+    });
   });
 }
 
@@ -572,6 +562,32 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
   if (window.location.pathname.endsWith('checkout.html')) {
     const form = document.getElementById('shipping-form');
+    const checkoutItemsContainer = document.querySelector('.checkout__items');
+    const subtotalElement = document.querySelector('.checkout__summary-item span:last-child');
+    const totalElement = document.querySelector('.checkout__summary-total span:last-child');
+    const shippingCost = 99;
+
+    // Render checkout items and summary
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    checkoutItemsContainer.innerHTML = '';
+    let subtotal = 0;
+    cart.forEach(item => {
+      checkoutItemsContainer.innerHTML += `
+        <div class="checkout__item">
+          <img src="${item.image}" alt="${item.name}" class="checkout__item-img">
+          <div class="checkout__item-content">
+            <h4 class="checkout__item-title">${item.name}</h4>
+            <span class="checkout__item-price">₹${item.price}</span>
+            <span class="checkout__item-quantity">x${item.quantity}</span>
+          </div>
+        </div>
+      `;
+      subtotal += item.price * item.quantity;
+    });
+    if (subtotalElement) subtotalElement.textContent = `₹${subtotal}`;
+    if (totalElement) totalElement.textContent = `₹${subtotal + shippingCost}`;
+
+    // Place order logic (already present)
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -581,13 +597,12 @@ document.addEventListener('DOMContentLoaded', function() {
           window.location.href = 'signin.html';
           return;
         }
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
         if (cart.length === 0) {
           alert('Your cart is empty!');
           return;
         }
         const products = cart.map(item => ({ product: item._id, quantity: item.quantity }));
-        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + 99; // 99 shipping
+        const total = subtotal + shippingCost;
         fetch(`${API_BASE}/orders`, {
           method: 'POST',
           headers: {
@@ -609,5 +624,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// Contact form submission (contact.html)
+if (window.location.pathname.endsWith('contact.html')) {
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.contact__form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = form.querySelector('input[name="name"]').value;
+        const email = form.querySelector('input[name="email"]').value;
+        const subject = form.querySelector('input[name="subject"]').value;
+        const message = form.querySelector('textarea[name="message"]').value;
+        fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) alert(data.error);
+          else alert('Message sent successfully!');
+          form.reset();
+        });
+      });
+    }
+  });
+}
 
 
